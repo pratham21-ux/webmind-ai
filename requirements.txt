@@ -1,0 +1,9 @@
+streamlit
+playwright
+beautifulsoup4
+qdrant-client
+sentence-transformers
+google-genai
+python-dotenv
+torch
+torchvision
