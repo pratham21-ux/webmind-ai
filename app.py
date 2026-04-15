@@ -25,11 +25,19 @@ st.markdown("""
 st.title("🧠 WebMind AI")
 st.caption("Universal Web RAG | Transform any URL into an Interactive Knowledge Base")
 
-# 1. Initialize Backend in Session State
+# 1. Initialize Backend (Cached to prevent 60s timeout on Streamlit Cloud)
+@st.cache_resource(show_spinner="Loading AI Models (This takes a minute on the first run)...")
+def load_backend():
+    # Initializing these inside the cache so the heavy models load once
+    return VectorDB(), TextChunker(), WebMindScraper()
+
+db, chunker, scraper = load_backend()
+
+# Initialize Session State with the loaded resources
 if 'db' not in st.session_state:
-    st.session_state.db = VectorDB()
-    st.session_state.chunker = TextChunker()
-    st.session_state.scraper = WebMindScraper()
+    st.session_state.db = db
+    st.session_state.chunker = chunker
+    st.session_state.scraper = scraper
     st.session_state.engine = None
     st.session_state.messages = []
     st.session_state.indexed_urls = []
